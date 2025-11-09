@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Sri Lanka This Week by Nuwan I. Senaratne — Machine Readable Feeds</title>
+  <title>Sri Lanka This Week by Nuwan I. Senaratna — Machine-Readable Feeds</title>
 
   <!-- Basic metadata -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,14 +25,16 @@
 
   <!-- Open Graph / social sharing -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Sri Lanka This Week by Nuwan I. Senaratne — Machine Readable Feeds" />
+  <meta property="og:title"
+        content="Sri Lanka This Week by Nuwan I. Senaratna — Machine-Readable Feeds" />
   <meta property="og:description"
         content="Subscribe to machine-readable feeds for 'Sri Lanka This Week', an AI-generated weekly digest of vetted Sri Lankan English news sources by Nuwan I. Senaratna (@nuuuwan)." />
   <meta property="og:url" content="https://nandulak.github.io/lk-news-weekly-feed/" />
 
   <!-- Twitter / X cards -->
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Sri Lanka This Week by Nuwan I. Senaratne — Machine Readable Feeds" />
+  <meta name="twitter:title"
+        content="Sri Lanka This Week by Nuwan I. Senaratna — Machine-Readable Feeds" />
   <meta name="twitter:description"
         content="Subscribe via RSS or JSON Feed to the weekly 'Sri Lanka This Week' digest." />
 
@@ -48,9 +50,12 @@
       --muted: #9ca3af;
       --radius: 14px;
       --shadow: 0 14px 40px rgba(15, 23, 42, 0.55);
-      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, -system-ui,
-                   -apple-system, BlinkMacSystemFont, "SF Pro Text",
-                   -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   "Segoe UI", sans-serif;
+      --banner-bg: #111827;
+      --banner-border: rgba(250, 204, 21, 0.45);
+      --banner-accent: #facc15;
+      --banner-soft: rgba(250, 204, 21, 0.06);
     }
 
     * {
@@ -61,7 +66,8 @@
       margin: 0;
       min-height: 100vh;
       font-family: var(--font-sans);
-      background: radial-gradient(circle at top, #111827 0, #020817 40%, #000 100%);
+      background:
+        radial-gradient(circle at top, #111827 0, #020817 40%, #000 100%);
       color: var(--fg);
       display: flex;
       align-items: center;
@@ -116,7 +122,8 @@
       padding: 12px 11px 11px;
       border-radius: 10px;
       border: 1px solid rgba(148, 163, 253, 0.28);
-      background: radial-gradient(circle at top left, var(--accent-soft), transparent);
+      background:
+        radial-gradient(circle at top left, var(--accent-soft), transparent);
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -153,13 +160,70 @@
     .meta {
       font-size: 0.8rem;
       color: var(--muted);
-      margin-bottom: 4px;
+      margin-bottom: 8px;
       line-height: 1.5;
     }
 
     .meta strong {
       color: var(--fg);
       font-weight: 600;
+    }
+
+    .support-banner {
+      margin: 14px 0 10px;
+      padding: 11px 11px 10px;
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at top left, var(--banner-soft), transparent),
+        var(--banner-bg);
+      border: 1px solid var(--banner-border);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.42);
+    }
+
+    .support-eyebrow {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--banner-accent);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .support-eyebrow span.icon {
+      font-size: 0.9rem;
+    }
+
+    .support-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .support-text {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .support-link {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--banner-accent);
+      margin-top: 2px;
+    }
+
+    .support-link a {
+      color: var(--banner-accent);
+      text-decoration: none;
+    }
+
+    .support-link a:hover,
+    .support-link a:focus-visible {
+      text-decoration: underline;
     }
 
     footer {
@@ -193,7 +257,7 @@
     <header>
       <h1>
         <span class="flag">🇱🇰</span>
-        Sri Lanka This Week by Nuwan I. Senaratne — Machine Readable Feeds
+        Sri Lanka This Week by Nuwan I. Senaratna — Machine-Readable Feeds
       </h1>
       <p>
         Machine-readable feeds for the weekly <strong>Sri Lanka This Week</strong>
@@ -221,7 +285,7 @@
 
     <section class="meta" aria-label="About these feeds">
       <p>
-        These feeds are a read-only, standards-compliant mirror of
+        These feeds are a read-only, standards-compliant companion to
         <strong>Sri Lanka This Week</strong>, which is
         <strong>curated &amp; maintained by Nuwan I. Senaratna</strong>
         (<a href="https://github.com/nuuuwan" rel="noopener noreferrer">@nuuuwan</a>)
@@ -230,24 +294,46 @@
            rel="noopener noreferrer">nuuuwan/lk_news_digest</a>.
       </p>
       <p>
-        The weekly digest itself is <strong>AI-generated</strong> (using large
-        language models such as GPT-5) from
-        <strong>vetted English-language Sri Lankan news sources</strong>, as
-        documented in the upstream project. This site simply exposes stable
-        feed URLs for use with feed readers, apps, and integrations.
+        The weekly digest is <strong>AI-generated</strong> from
+        <strong>vetted English-language Sri Lankan news sources</strong>
+        using large language models, as documented in the upstream project.
+        This site simply parses the published markdown editions and exposes
+        stable feed URLs for use with feed readers, applications, and integrations.
       </p>
+    </section>
+
+    <section class="support-banner" aria-label="Support independent Sri Lankan journalism">
+      <div class="support-eyebrow">
+        <span class="icon">📰</span>
+        SUPPORT INDEPENDENT SRI LANKAN JOURNALISM
+      </div>
+      <div class="support-title">
+        For deeply reported, human-led analysis, subscribe to <strong>The Examiner</strong>.
+      </div>
+      <div class="support-text">
+        Alongside AI-assisted digests like this, independent subscriber-funded outlets such as
+        <strong>The Examiner</strong> provide rigorous, on-the-ground reporting and thoughtful commentary
+        on Sri Lanka’s political economy, institutions, and public life.
+      </div>
+      <div class="support-link">
+        Learn more &amp; subscribe:
+        <!-- Replace with the canonical URL for The Examiner once finalised -->
+        <a href="https://examiner.media" target="_blank" rel="noopener noreferrer">
+          https://examiner.media
+        </a>
+      </div>
     </section>
 
     <footer>
       <span>
-        Feed implementation &amp; hosting:
+        Feed implementation &amp; hosting by Asel:
         <a href="https://github.com/nandulak/lk-news-weekly-feed"
            rel="noopener noreferrer">nandulak/lk-news-weekly-feed</a>.
       </span>
       <span>
-        All credit for the original editorial content, data sourcing, and concept
-        belongs to <strong>Nuwan I. Senaratna (@nuuuwan)</strong>. Please refer to
-        the upstream repository for methodology, licensing, and source details.
+        All credit for the original editorial content, data sourcing, and core concept
+        belongs to <strong>Nuwan I. Senaratna (@nuuuwan)</strong>. Refer to the upstream
+        repository for methodology, licensing, and source details.
       </span>
     </footer>
   </main>
