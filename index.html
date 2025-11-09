@@ -1,16 +1,255 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Sri Lanka This Week — Feeds</title>
+  <meta charset="utf-8" />
+  <title>Sri Lanka This Week — Official Feeds</title>
+
+  <!-- Basic metadata -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+        content="Machine-readable RSS and JSON feeds for 'Sri Lanka This Week', an AI-generated weekly digest of vetted Sri Lankan English news sources by Nuwan I. Senaratna (@nuuuwan)." />
+  <meta name="robots" content="index,follow" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://nandulak.github.io/lk-news-weekly-feed/" />
+
+  <!-- Feed autodiscovery -->
+  <link rel="alternate"
+        type="application/rss+xml"
+        title="Sri Lanka This Week – RSS 2.0"
+        href="https://nandulak.github.io/lk-news-weekly-feed/news.xml" />
+  <link rel="alternate"
+        type="application/feed+json"
+        title="Sri Lanka This Week – JSON Feed 1.1"
+        href="https://nandulak.github.io/lk-news-weekly-feed/news.json" />
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sri Lanka This Week — Official Feeds" />
+  <meta property="og:description"
+        content="Subscribe to machine-readable feeds for 'Sri Lanka This Week', an AI-generated weekly digest of vetted Sri Lankan English news sources by Nuwan I. Senaratna (@nuuuwan)." />
+  <meta property="og:url" content="https://nandulak.github.io/lk-news-weekly-feed/" />
+
+  <!-- Twitter / X cards -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Sri Lanka This Week — Official Feeds" />
+  <meta name="twitter:description"
+        content="Subscribe via RSS or JSON Feed to the weekly 'Sri Lanka This Week' digest." />
+
+  <!-- Minimal, accessible styling -->
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --fg: #e5e7eb;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.1);
+      --muted: #9ca3af;
+      --radius: 14px;
+      --shadow: 0 14px 40px rgba(15, 23, 42, 0.55);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, -system-ui,
+                   -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at top, #111827 0, #020817 40%, #000 100%);
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      background: linear-gradient(145deg, var(--bg), var(--bg-soft));
+      border-radius: var(--radius);
+      padding: 28px 24px 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(148, 163, 253, 0.16);
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 18px;
+    }
+
+    header h1 {
+      font-size: 1.7rem;
+      margin: 0;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    header h1 span.flag {
+      font-size: 1.5rem;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .feeds {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .feed-card {
+      padding: 12px 11px 11px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 253, 0.28);
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .feed-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--muted);
+    }
+
+    .feed-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .feed-url {
+      font-size: 0.78rem;
+      color: var(--accent);
+      word-break: break-all;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+      text-decoration: underline;
+    }
+
+    .meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+
+    .meta strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(75, 85, 99, 0.5);
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    footer a {
+      color: var(--accent);
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 22px 16px 18px;
+      }
+
+      header h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Sri Lanka This Week — Feeds</h1>
-  <p>Edition: 2025-11-07 · Published (Colombo): 2025-11-07T06:18:12+05:30</p>
-  <ul>
-    <li><a href="news.xml">RSS 2.0 feed</a></li>
-    <li><a href="news.json">JSON Feed 1.1</a></li>
-    <li>Source: <a href="https://github.com/nuuuwan/lk_news_digest/blob/main/README.md">Upstream README</a></li>
-  </ul>
+  <main>
+    <header>
+      <h1>
+        <span class="flag">🇱🇰</span>
+        Sri Lanka This Week — Official Feeds
+      </h1>
+      <p>
+        Machine-readable feeds for the weekly <strong>Sri Lanka This Week</strong>
+        editorial digest of vetted Sri Lankan English news sources.
+      </p>
+    </header>
+
+    <section class="feeds" aria-label="Subscription feeds">
+      <article class="feed-card">
+        <div class="feed-label">Primary Feed</div>
+        <div class="feed-title">RSS 2.0</div>
+        <a class="feed-url" href="news.xml">
+          https://nandulak.github.io/lk-news-weekly-feed/news.xml
+        </a>
+      </article>
+
+      <article class="feed-card">
+        <div class="feed-label">Alternative Feed</div>
+        <div class="feed-title">JSON Feed 1.1</div>
+        <a class="feed-url" href="news.json">
+          https://nandulak.github.io/lk-news-weekly-feed/news.json
+        </a>
+      </article>
+    </section>
+
+    <section class="meta" aria-label="About these feeds">
+      <p>
+        These feeds are a read-only, standards-compliant mirror of
+        <strong>Sri Lanka This Week</strong>, which is
+        <strong>curated &amp; maintained by Nuwan I. Senaratna</strong>
+        (<a href="https://github.com/nuuuwan" rel="noopener noreferrer">@nuuuwan</a>)
+        in the upstream repository
+        <a href="https://github.com/nuuuwan/lk_news_digest"
+           rel="noopener noreferrer">nuuuwan/lk_news_digest</a>.
+      </p>
+      <p>
+        The weekly digest itself is <strong>AI-generated</strong> (using large
+        language models such as GPT-5) from
+        <strong>vetted English-language Sri Lankan news sources</strong>, as
+        documented in the upstream project. This site simply exposes stable
+        feed URLs for use with feed readers, apps, and integrations.
+      </p>
+    </section>
+
+    <footer>
+      <span>
+        Feed implementation &amp; hosting:
+        <a href="https://github.com/nandulak/lk-news-weekly-feed"
+           rel="noopener noreferrer">nandulak/lk-news-weekly-feed</a>.
+      </span>
+      <span>
+        All credit for the original editorial content, data sourcing, and concept
+        belongs to <strong>Nuwan I. Senaratna (@nuuuwan)</strong>. Please refer to
+        the upstream repository for methodology, licensing, and source details.
+      </span>
+    </footer>
+  </main>
 </body>
 </html>
