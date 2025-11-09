@@ -8,6 +8,13 @@ This repository does **not** generate original news content. It:
 - consumes the AI-generated weekly digest curated and maintained by **[Nuwan Senaratna](https://github.com/nuuuwan)** in `nuuuwan/lk_news_digest`, and  
 - exposes a clean, standards-compliant RSS 2.0 and JSON Feed 1.1 output for use in feed readers and integrations.
 
+> ### 📰 Support Independent Journalism: The Examiner
+> 
+> If you care about rigorous, well-reported, human-written coverage on Sri Lanka, consider subscribing to **[The Examiner](https://www.examiner.media/)** — a subscriber-funded, ad-free weekly digital newspaper.
+> 
+> This project is **not affiliated** with The Examiner, but it strongly endorses their commitment to editorial independence, careful fact-checking, and public-interest reporting.
+
+
 ---
 
 ## Feeds
