@@ -33,8 +33,8 @@ jobs:
         run: |
           pwd
           ls -lah
-          cat feed.xml | head -n 5 || true
-          cat feed.json | head -n 5 || true
+          cat news.xml | head -n 5 || true
+          cat news.json | head -n 5 || true
 
       - name: Commit & push updated feeds
         uses: stefanzweifel/git-auto-commit-action@v5
