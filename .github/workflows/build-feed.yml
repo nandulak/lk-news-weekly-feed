@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: "0 1 * * FRI"  # 01:00 UTC every Friday
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,10 +29,15 @@ jobs:
       - name: Build feeds
         run: python build_feeds.py
 
+      - name: Show generated feeds
+        run: |
+          pwd
+          ls -lah
+          cat feed.xml | head -n 5 || true
+          cat feed.json | head -n 5 || true
+
       - name: Commit & push updated feeds
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update LK news feeds"
-          file_pattern: |
-            feed.xml
-            feed.json
+          file_pattern: "feed.*"
