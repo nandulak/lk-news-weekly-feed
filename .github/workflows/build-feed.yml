@@ -1,0 +1,178 @@
+name: Build weekly Sri Lanka news feeds
+
+on:
+  # Run shortly after Nuwan’s Friday job (00:30 UTC) to give it time to commit.
+  schedule:
+    - cron: "10 1 * * 5"   # 01:10 UTC every Friday
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests markdown tzdata
+
+      - name: Generate RSS/JSON feeds (format-aware)
+        env:
+          SRC_RAW: https://raw.githubusercontent.com/nuuuwan/lk_news_digest/main/README.md
+          SRC_README: https://github.com/nuuuwan/lk_news_digest/blob/main/README.md
+          SRC_REPO: https://github.com/nuuuwan/lk_news_digest
+          TZ_NAME: Asia/Colombo
+        run: |
+          python - << 'PY'
+          import os, re, json, email.utils
+          from datetime import datetime, timezone
+          from zoneinfo import ZoneInfo
+          import requests
+          from markdown import markdown
+
+          # Inputs / constants
+          SRC_RAW = os.environ["SRC_RAW"]
+          SRC_README = os.environ["SRC_README"]
+          SRC_REPO = os.environ["SRC_REPO"]
+          TZ_NAME = os.environ.get("TZ_NAME", "Asia/Colombo")
+
+          # Derive Pages base URL from this repo (owner/repo -> https://owner.github.io/repo/)
+          owner, repo = os.environ.get("GITHUB_REPOSITORY", "owner/repo").split("/", 1)
+          pages_base = f"https://{owner}.github.io/{repo}"
+
+          # Fetch upstream README
+          r = requests.get(SRC_RAW, timeout=60)
+          r.raise_for_status()
+          md = r.text
+
+          # --- Parse fields from the README ---
+
+          # 1) LastUpdated
+          last_updated = None
+          m = re.search(r"last_updated-([0-9]{4}--[0-9]{2}--[0-9]{2}_[0-9]{2}:[0-9]{2}:[0-9]{2})", md)
+          if m:
+            raw = m.group(1).replace("--", "-")  # -> 2025-11-07_06:18:12
+            try:
+              last_updated = datetime.strptime(raw, "%Y-%m-%d_%H:%M:%S").replace(tzinfo=ZoneInfo(TZ_NAME))
+            except Exception:
+              pass
+
+          # 2) Article count
+          articles = None
+          m = re.search(r"from\s+\*\*(\d+)\*\*\s+English\s+News\s+Articles", md, flags=re.I)
+          if m:
+            articles = int(m.group(1))
+
+          # 3) Date range
+          edition_date = None
+          m = re.search(r"published\s+between\s+\*\*(\d{4}-\d{2}-\d{2})\*\*\s*&\s*\*\*(\d{4}-\d{2}-\d{2})\*\*", md, flags=re.I)
+          if m:
+            start_str, end_str = m.group(1), m.group(2)
+            try:
+              edition_date = datetime.strptime(end_str, "%Y-%m-%d").date()
+            except Exception:
+              pass
+
+          # Fallbacks
+          if edition_date is None and last_updated is not None:
+            edition_date = last_updated.date()
+          if last_updated is None:
+            last_updated = datetime.now(ZoneInfo(TZ_NAME))
+          if edition_date is None:
+            edition_date = last_updated.date()
+
+          # Times for feeds
+          pub_dt_local = last_updated
+          pub_dt_utc = pub_dt_local.astimezone(timezone.utc)
+          pub_rfc2822 = email.utils.format_datetime(pub_dt_utc)  # RSS pubDate
+          pub_iso = pub_dt_utc.replace(microsecond=0).isoformat().replace("+00:00", "Z")  # JSON Feed
+
+          # Titles
+          feed_title = "Sri Lanka This Week"
+          item_title_bits = [feed_title, str(edition_date)]
+          if articles:
+            item_title_bits.append(f"({articles} sources)")
+          item_title = " — ".join(item_title_bits)
+
+          # Convert README markdown -> HTML for content
+          html = markdown(md, output_format="html5")
+
+          # Deterministic ID per edition; include time to avoid collisions if same date is republished
+          item_id = f"lk-news-weekly-{edition_date.isoformat()}-{pub_dt_utc.strftime('%H%M%S')}"
+
+          # --- Write RSS 2.0 ---
+          rss = f'''<?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>{feed_title}</title>
+              <link>{SRC_REPO}</link>
+              <description>Weekly AI-assisted Sri Lanka news digest.</description>
+              <language>en-LK</language>
+              <lastBuildDate>{pub_rfc2822}</lastBuildDate>
+              <item>
+                <title>{item_title}</title>
+                <link>{SRC_README}</link>
+                <guid isPermaLink="false">{item_id}</guid>
+                <pubDate>{pub_rfc2822}</pubDate>
+                <description><![CDATA[{html}]]></description>
+              </item>
+            </channel>
+          </rss>
+          '''
+          with open("feed.xml", "w", encoding="utf-8") as f:
+            f.write(rss)
+
+          # --- Write JSON Feed 1.1 ---
+          feed = {
+            "version": "https://jsonfeed.org/version/1.1",
+            "title": feed_title,
+            "home_page_url": SRC_REPO,
+            "feed_url": f"{pages_base}/feed.json",
+            "language": "en-LK",
+            "items": [
+              {
+                "id": item_id,
+                "url": SRC_README,
+                "title": item_title,
+                "content_html": html,
+                "date_published": pub_iso,
+              }
+            ]
+          }
+          with open("feed.json", "w", encoding="utf-8") as f:
+            json.dump(feed, f, ensure_ascii=False, indent=2)
+
+          # Optional: a tiny index so the Pages root is useful
+          index = f"""<!doctype html>
+          <meta charset="utf-8">
+          <title>{feed_title} — feeds</title>
+          <h1>{feed_title} — feeds</h1>
+          <p>Edition: {edition_date} • Published: {pub_dt_local.isoformat()}</p>
+          <ul>
+            <li><a href="feed.xml">RSS 2.0</a></li>
+            <li><a href="feed.json">JSON Feed 1.1</a></li>
+            <li>Source: <a href="{SRC_README}">Upstream README</a></li>
+          </ul>
+          """
+          with open("index.html", "w", encoding="utf-8") as f:
+            f.write(index)
+          PY
+
+      - name: Commit and push artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add feed.xml feed.json index.html || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Update feeds from upstream README"
+          git push
