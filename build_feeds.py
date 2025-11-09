@@ -12,6 +12,7 @@ SOURCE_REPO = "nuuuwan/lk_news_digest"
 RAW_BASE = f"https://raw.githubusercontent.com/{SOURCE_REPO}/main"
 LATEST_README_URL = f"{RAW_BASE}/README.md"
 HISTORY_API_URL = f"https://api.github.com/repos/{SOURCE_REPO}/contents/data/history"
+FEED_BASE = "https://nandulak.github.io/lk-news-weekly-feed"
 
 # How many weeks to expose in the rolling feed
 MAX_ITEMS = 12
@@ -174,6 +175,7 @@ def build_rss(editions):
     lines.append(
         '<rss version="2.0" '
         'xmlns:content="http://purl.org/rss/1.0/modules/content/">'
+        'xmlns:atom="http://www.w3.org/2005/Atom">'
     )
     lines.append("  <channel>")
     lines.append("    <title>Sri Lanka This Week</title>")
@@ -187,6 +189,10 @@ def build_rss(editions):
     lines.append(f"    <lastBuildDate>{last_build_rss}</lastBuildDate>")
     lines.append("    <generator>lk-news-digest-feed-builder</generator>")
     lines.append("    <ttl>60</ttl>")
+    lines.append(
+        f'    <atom:link rel="self" type="application/rss+xml" '
+        f'href="{FEED_BASE}/feed.xml" />'
+    )
 
     for ed in editions:
         lines.append("    <item>")
@@ -214,8 +220,8 @@ def build_json_feed(editions):
         "version": "https://jsonfeed.org/version/1.1",
         "title": "Sri Lanka This Week",
         "home_page_url": "https://github.com/nuuuwan/lk_news_digest",
-        # Update this once you know your actual published URL:
-        "feed_url": "https://nandulak.github.io/lk-news-digest-feed/feed.json",
+
+        "feed_url": f"{FEED_BASE}/feed.json",
         "description": (
             "Curated weekly digest of Sri Lanka news, generated from "
             "vetted English-language sources."
