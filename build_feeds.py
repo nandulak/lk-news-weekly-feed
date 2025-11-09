@@ -9,8 +9,8 @@ Key behaviours:
 - Keeps only the latest version per edition_date.
 - Includes only editions from CUTOFF_DATE onwards.
 - Outputs:
-    - feed.xml  (RSS 2.0 + content:encoded + atom:link rel="self")
-    - feed.json (JSON Feed 1.1)
+    - news.xml  (RSS 2.0 + content:encoded + atom:link rel="self")
+    - news.json (JSON Feed 1.1)
 """
 
 import datetime as dt
