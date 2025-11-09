@@ -336,7 +336,7 @@ def build_rss(editions: List[Dict[str, Any]]) -> str:
     lines.append("    <ttl>60</ttl>")
     lines.append(
         f'    <atom:link rel="self" type="application/rss+xml" '
-        f'href="{FEED_BASE}/feed.xml" />'
+        f'href="{FEED_BASE}/news.xml" />'
     )
 
     for ed in editions:
@@ -373,7 +373,7 @@ def build_json_feed(editions: List[Dict[str, Any]]) -> str:
         "version": "https://jsonfeed.org/version/1.1",
         "title": "Sri Lanka This Week",
         "home_page_url": "https://github.com/nuuuwan/lk_news_digest",
-        "feed_url": f"{FEED_BASE}/feed.json",
+        "feed_url": f"{FEED_BASE}/news.json",
         "description": (
             "Curated weekly digest of Sri Lanka news, generated from "
             "vetted English-language sources."
@@ -405,8 +405,8 @@ def main() -> None:
     rss = build_rss(editions)
     json_feed = build_json_feed(editions)
 
-    (out_dir / "feed.xml").write_text(rss, encoding="utf-8")
-    (out_dir / "feed.json").write_text(json_feed, encoding="utf-8")
+    (out_dir / "news.xml").write_text(rss, encoding="utf-8")
+    (out_dir / "news.json").write_text(json_feed, encoding="utf-8")
 
 
 if __name__ == "__main__":
