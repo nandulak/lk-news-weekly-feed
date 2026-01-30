@@ -5,7 +5,7 @@
     <link>https://github.com/nuuuwan/lk_news_digest</link>
     <description>Curated weekly digest of Sri Lanka news, generated from vetted English-language sources.</description>
     <language>en-LK</language>
-    <lastBuildDate>Fri, 23 Jan 2026 01:32:12 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 30 Jan 2026 01:33:37 +0000</lastBuildDate>
     <generator>lk-news-digest-feed-builder</generator>
     <ttl>60</ttl>
     <atom:link rel="self" type="application/rss+xml" href="https://nandulak.github.io/lk-news-weekly-feed/news.xml" />
